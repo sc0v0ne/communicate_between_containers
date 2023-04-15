@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+
+  container_ubuntu_1:
+    container_name: ubuntu_1
+    build: 
+      dockerfile: ./Dockerfile
+      context: .
+    entrypoint: ['/bin/sh', '-c']
+    command:
+      - |
+        uvicorn app.main:app --host 0.0.0.0 --port 9100
+    ports:
+      - '9100:9100'
+    volumes:
+      - volume_between_containers:/application/logs
+  container_ubuntu_2:
+    container_name: ubuntu_2
+    build: 
+      dockerfile: ./Dockerfile
+      context: .
+    entrypoint: ['/bin/sh', '-c']
+    command:
+      - |
+        uvicorn app.main:app --host 0.0.0.0 --port 9200
+    ports:
+      - '9200:9200'
+    volumes:
+      - volume_between_containers:/application/logs
+
+volumes:
+  volume_between_containers:
